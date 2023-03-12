@@ -4,7 +4,7 @@ export const backendApi = createApi({
   reducerPath: "backend",
 
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.BACKEND_URL || "http://localhost:3000",
+    baseUrl: process.env.VITE_BACKEND_URL,
     headers: {
       "Content-Type": "application/json",
     },
