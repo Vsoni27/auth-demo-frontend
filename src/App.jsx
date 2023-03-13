@@ -1,24 +1,35 @@
-import React from "react"
-import { Routes, Route, Navigate, Outlet } from "react-router-dom"
-import { Stack } from "@mui/material"
-import { useProfileQuery } from "../store"
-import Navbar from "./components/Navbar"
-import { Profile, Signup, Login, Home, ForgetPassword, ResetPassword } from "./pages"
+import React from "react";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Stack } from "@mui/material";
+import { useProfileQuery } from "../store";
+import Navbar from "./components/Navbar";
+
+import {
+  Profile,
+  Signup,
+  Login,
+  Home,
+  ForgetPassword,
+  ResetPassword,
+} from "./pages";
+
+import { Loading } from "./components/Loading";
+import Error404 from "./pages/Error";
 
 const LoggedInRoute = ({ user, redirectPath }) => {
-  if (!user) return <Navigate to={redirectPath} replace />
-  return <Outlet />
-}
+  if (!user) return <Navigate to={redirectPath} replace />;
+  return <Outlet />;
+};
 
 const NonLoggedInRoute = ({ user, redirectPath }) => {
-  if (user) return <Navigate to={redirectPath} replace />
-  return <Outlet />
-}
+  if (user) return <Navigate to={redirectPath} replace />;
+  return <Outlet />;
+};
 
 const App = () => {
-  const { data, isFetching, isError } = useProfileQuery()
-  // if (isFetching) return <>Loading</>
-
+  const { data, isFetching, isError } = useProfileQuery();
+  console.log(isFetching);
+  if (isFetching) return <Loading />;
   return (
     <Stack sx={{ height: "100vh", width: "100vw", bgcolor: "#000" }}>
       <Navbar user={data?.user} />
@@ -27,22 +38,31 @@ const App = () => {
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         {/* LoggedIn Routes */}
-        <Route element={<LoggedInRoute user={data?.user} redirectPath="/login" />}>
+        <Route
+          element={<LoggedInRoute user={data?.user} redirectPath="/login" />}
+        >
           <Route path="/profile" element={<Profile />} />
         </Route>
         {/* Non-LoggedIn Routes */}
-        <Route element={<NonLoggedInRoute user={data?.user} redirectPath="/profile" />}>
+        <Route
+          element={
+            <NonLoggedInRoute user={data?.user} redirectPath="/profile" />
+          }
+        >
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+          <Route
+            path="/reset-password/:resetToken"
+            element={<ResetPassword />}
+          />
         </Route>
         {/* Unknown Routes (404) */}
-        <Route path="*" element={<div>404 NOT FOUND</div>} />
+        <Route path="*" element={<Error404 />} />
         {/* End */}
       </Routes>
     </Stack>
-  )
-}
+  );
+};
 
-export default App
+export default App;
