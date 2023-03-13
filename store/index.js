@@ -1,6 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
-import { backendApi, useSignupMutation, useLoginMutation, useLogoutMutation, useProfileQuery } from "./apis/backendApi"
+import {
+  backendApi,
+  useSignupMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useProfileQuery,
+  useForgetPasswordMutation,
+  useResetPasswordMutation,
+} from "./apis/backendApi"
 
 export const store = configureStore({
   reducer: {
@@ -11,4 +19,4 @@ export const store = configureStore({
 
 setupListeners(store.dispatch)
 
-export { useSignupMutation, useLoginMutation, useLogoutMutation, useProfileQuery }
+export { useSignupMutation, useLoginMutation, useLogoutMutation, useProfileQuery, useForgetPasswordMutation, useResetPasswordMutation }

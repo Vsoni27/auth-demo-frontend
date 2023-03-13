@@ -4,7 +4,7 @@ export const backendApi = createApi({
   reducerPath: "backend",
 
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BACKEND_URL,
+    baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api/users`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -16,7 +16,7 @@ export const backendApi = createApi({
       login: builder.mutation({
         invalidatesTags: ["profile"],
         query: ({ email, password }) => ({
-          url: "/api/users/login",
+          url: "/login",
           method: "POST",
           body: { email, password },
         }),
@@ -24,7 +24,7 @@ export const backendApi = createApi({
 
       signup: builder.mutation({
         query: ({ email, password, name }) => ({
-          url: "/api/users",
+          url: "/",
           method: "POST",
           body: { email, password, name },
         }),
@@ -33,7 +33,7 @@ export const backendApi = createApi({
       profile: builder.query({
         providesTags: ["profile"],
         query: () => ({
-          url: "/api/users/me",
+          url: "/me",
           method: "GET",
         }),
       }),
@@ -41,12 +41,36 @@ export const backendApi = createApi({
       logout: builder.mutation({
         invalidatesTags: ["profile"],
         query: () => ({
-          url: "/api/users/logout",
+          url: "/logout",
           method: "POST",
+        }),
+      }),
+
+      forgetPassword: builder.mutation({
+        query: ({ email }) => ({
+          url: "/forgot-password",
+          method: "POST",
+          body: { email },
+        }),
+      }),
+
+      resetPassword: builder.mutation({
+        invalidatesTags: ["profile"],
+        query: ({ resetToken: token, password }) => ({
+          url: "/reset-password",
+          method: "POST",
+          body: { token, password },
         }),
       }),
     }
   },
 })
 
-export const { useSignupMutation, useLoginMutation, useLogoutMutation, useProfileQuery } = backendApi
+export const {
+  useSignupMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useProfileQuery,
+  useForgetPasswordMutation,
+  useResetPasswordMutation,
+} = backendApi

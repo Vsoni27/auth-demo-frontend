@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom"
 import { Stack } from "@mui/material"
 import { useProfileQuery } from "../store"
 import Navbar from "./components/Navbar"
-import { Profile, Signup, Login, Home } from "./pages"
+import { Profile, Signup, Login, Home, ForgetPassword, ResetPassword } from "./pages"
 
 const LoggedInRoute = ({ user, redirectPath }) => {
   if (!user) return <Navigate to={redirectPath} replace />
@@ -34,7 +34,11 @@ const App = () => {
         <Route element={<NonLoggedInRoute user={data?.user} redirectPath="/profile" />}>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
         </Route>
+        {/* Unknown Routes (404) */}
+        <Route path="*" element={<div>404 NOT FOUND</div>} />
         {/* End */}
       </Routes>
     </Stack>
